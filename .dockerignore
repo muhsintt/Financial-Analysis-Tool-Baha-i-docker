@@ -1,0 +1,47 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv
+venv/
+ENV/
+env/
+.eggs
+*.egg-info/
+*.egg
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docs (not needed in container)
+*.md
+!README.md
+
+# Test files
+test_*.py
+*.test.py
+
+# Local scripts
+start.bat
+start.sh
+verify_setup.bat
+verify_setup.sh
+
+# Database (will be mounted as volume)
+*.db
+
+# Uploads (will be mounted as volume)
+backend/uploads/

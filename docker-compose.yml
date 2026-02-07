@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  expense-tracker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: expense-tracker
+    expose:
+      - "5000"
+    volumes:
+      # Persist database and uploads
+      - expense_data:/app/backend/data
+      - expense_uploads:/app/backend/uploads
+      - ./backend/expense_tracker.db:/app/backend/expense_tracker.db
+    environment:
+      - FLASK_ENV=production
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/api/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - app-network
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - expense-tracker
+    restart: unless-stopped
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  expense_data:
+  expense_uploads:
