@@ -12,7 +12,7 @@ services:
       # Persist database and uploads
       - expense_data:/app/backend/data
       - expense_uploads:/app/backend/uploads
-      - ./backend/expense_tracker.db:/app/backend/expense_tracker.db
+      - expense_db:/app/backend/db
     environment:
       - FLASK_ENV=production
       - PYTHONUNBUFFERED=1
@@ -21,8 +21,8 @@ services:
       test: ["CMD", "curl", "-f", "http://localhost:5000/api/status"]
       interval: 30s
       timeout: 10s
-      retries: 3
-      start_period: 40s
+      retries: 5
+      start_period: 60s
     networks:
       - app-network
 
@@ -48,3 +48,4 @@ networks:
 volumes:
   expense_data:
   expense_uploads:
+  expense_db:
